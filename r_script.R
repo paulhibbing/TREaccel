@@ -23,6 +23,8 @@ rm(list = ls())
   
 # read.md -----------------------------------------------------------------
 
+  library(magrittr)
+
   # Use the sample file that comes with `read.gt3x`
   sample_file <- system.file(
     "extdata/TAS1H30182785_2019-09-17.gt3x",
