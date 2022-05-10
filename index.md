@@ -1,6 +1,6 @@
 Thanks for your interest in sample R code for running our accelerometer method for time restricted eating trials. We recognize that coding can be hard no matter your experience level, but especially so if you're just getting started. We want this resource to make it easier. If it's not working for you, please let us know by [filing an issue](https://github.com/paulhibbing/TREaccel/issues/new/choose). This is a convenient way for us to discuss what's not working and find a way to fix it, while doing so in a visible way that will also help others who have the same questions.
 
-Click [here](https://raw.githubusercontent.com/paulhibbing/TREaccel/main/r_script.R) if you want to view all of this code in a single R script format, or [here](https://raw.githubusercontent.com/paulhibbing/TREaccel/main/Vignette.pdf) to view a PDF vignette of the code (very similar to the content below).
+Click [here](https://raw.githubusercontent.com/paulhibbing/TREaccel/main/r_script.R) if you want to view all of this code in a single R script format, or [here](https://raw.githubusercontent.com/paulhibbing/TREaccel/main/Vignette.pdf) to download a PDF vignette of the code (very similar to the content below).
 
 Otherwise, read on and we'll walk you through everything.
 
@@ -149,12 +149,12 @@ Here's how we calculate non-wear using the **PhysicalActivity** package
 
 AG %<>%
   # Run the non-wear algorithm
-  PhysicalActivity::wearingMarking(
-    TS = "time", cts = "Axis1", perMinuteCts = 1, tz = "UTC"
-  ) %>%
+    PhysicalActivity::wearingMarking(
+      TS = "time", cts = "Axis1", perMinuteCts = 1, tz = "UTC"
+    ) %>%
   # Format the output
-  dplyr::mutate(is_nonwear = !wearing %in% "w") %>%
-  dplyr::select(-c(wearing, weekday, days))
+    dplyr::mutate(is_nonwear = !wearing %in% "w") %>%
+    dplyr::select(-c(wearing, weekday, days))
 
 ```
 
@@ -183,20 +183,20 @@ the non-wear minutes.
 
 AG %<>%
   # Replace variables with 0 if reading occurred during a non-wear period
-  dplyr::group_by(filename, time = as.Date(time)) %>%
-  dplyr::mutate(dplyr::across(
-    !dplyr::all_of("is_nonwear"),
-    .fns = ~ ifelse(is_nonwear | is.na(.x), 0, .x)
-  )) %>%
+    dplyr::group_by(filename, time = as.Date(time)) %>%
+    dplyr::mutate(dplyr::across(
+      !dplyr::all_of("is_nonwear"),
+      .fns = ~ ifelse(is_nonwear | is.na(.x), 0, .x)
+    )) %>%
   # Add everything up
-  dplyr::summarise(
-    dplyr::across(.fns = sum),
-    total_mins = dplyr::n(),
-    .groups = "drop"
-  ) %>%
+    dplyr::summarise(
+      dplyr::across(.fns = sum),
+      total_mins = dplyr::n(),
+      .groups = "drop"
+    ) %>%
   # Format the output
-  dplyr::rename(nonwear_mins = is_nonwear, date = time, kcal_kg = kcal_kg_min) %>%
-  dplyr::relocate(filename, date, total_mins, nonwear_mins)
+    dplyr::rename(nonwear_mins = is_nonwear, date = time, kcal_kg = kcal_kg_min) %>%
+    dplyr::relocate(filename, date, total_mins, nonwear_mins)
 
 ```
 
@@ -257,20 +257,20 @@ demo$basal_kcal_day <- PAutilities::get_ree(
 ## a final estimate of energy expenditure
 EE <-
   # Start by merging the demographic and accelerometer data
-  merge(demo, AG) %>%
+    merge(demo, AG) %>%
   # Then determine how many kcal to impute during non-wear minutes
   # (NB: The number of minutes in a full day is 24*60 = 1440)
-  dplyr::mutate(
-    basal_kcal_day = round(basal_kcal_day),
-    nonwear_kcal = basal_kcal_day*(nonwear_mins / 1440),
-    wear_kcal = kcal_kg * wt_kg,
-    total_kcal = nonwear_kcal + wear_kcal,
-    kcal_kg = NULL
-  ) %>%
+    dplyr::mutate(
+      basal_kcal_day = round(basal_kcal_day),
+      nonwear_kcal = basal_kcal_day*(nonwear_mins / 1440),
+      wear_kcal = kcal_kg * wt_kg,
+      total_kcal = nonwear_kcal + wear_kcal,
+      kcal_kg = NULL
+    ) %>%
   # Remove the activity count totals for simplicity
-  dplyr::select(!dplyr::matches("^[AV][xe]")) %>%
+    dplyr::select(!dplyr::matches("^[AV][xe]")) %>%
   # Reorder the variables
-  dplyr::relocate(participant_compliant, day_compliant, .after = basal_kcal_day)
+    dplyr::relocate(participant_compliant, day_compliant, .after = basal_kcal_day)
 
 ```
 
