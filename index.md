@@ -1,5 +1,3 @@
-## TREaccel
-
 Thanks for your interest in sample R code for running our accelerometer method for time restricted eating trials. We recognize that coding can be hard no matter your experience level, but especially so if you're just getting started. We want this resource to make it easier. If it's not working for you, please let us know by [filing an issue](https://github.com/paulhibbing/TREaccel/issues/new/choose). This is a convenient way for us to discuss what's not working and find a way to fix it, while doing so in a visible way that will also help others who have the same questions.
 
 Click [here](https://raw.githubusercontent.com/paulhibbing/TREaccel/main/r_script.R) if you want to view all of this code in a single R script format, or [here](https://raw.githubusercontent.com/paulhibbing/TREaccel/main/Vignette.pdf) to view a PDF vignette of the code (very similar to the content below).
