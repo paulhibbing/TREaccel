@@ -84,13 +84,13 @@ sample_file <- system.file(
 # my_file <- "C:/users/myusername/Desktop/myfile.gt3x"
 
 # Read the raw acceleration data (30+ Hz) and make sure timestamps
-# are in UTC timezone -- Store this in an object called `AG`
+# are in UTC timezone -- Store this in an object called `accel`
 accel <-
   read.gt3x::read.gt3x(sample_file, FALSE, TRUE, TRUE) %>%
   dplyr::mutate(time = lubridate::force_tz(time, "UTC"))
 
 # Convert to activity counts (60-s epochs) and make sure timestamps
-# are in UTC timezone; store this in a separate object called `counts`
+# are in UTC timezone; store this in a separate object called `AG`
 # (The call to `slice` is needed because `calculate_counts` adds zeroes to the
 # end of the file based on when the monitor was downlodaed, whereas `read.gt3x`
 # does not)
